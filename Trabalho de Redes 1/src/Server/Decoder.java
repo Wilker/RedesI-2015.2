@@ -17,7 +17,7 @@ public class Decoder {
 
     private String[] dir;
     private String currentDirectory;
-    private final String defaultDirectory = "C:\\";
+    private String defaultDirectory;
 
     /**
      * Recebe um InputStream e decodifica verificando o comando a ser realizado;
@@ -28,6 +28,7 @@ public class Decoder {
      */
     String[] decode(InputStream in) throws IOException, IllegalArgumentException {
         BufferedReader inFromClient = new BufferedReader(new InputStreamReader(in)); //recebe o InputStream do cliente
+        defaultDirectory = setDefaultDirectory();
         currentDirectory = defaultDirectory;
         dir = inFromClient.readLine().split(" ");
         if (validate(dir)) {
@@ -73,5 +74,13 @@ public class Decoder {
             return true;
         }
         return false;
+    }
+
+    private String setDefaultDirectory() {
+        String system = System.getProperty("os.name");
+        if (system.toLowerCase().contains("windows")) {
+            return "c:\\";        
+        }
+        return "/home";
     }
 }

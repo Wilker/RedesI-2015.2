@@ -22,6 +22,7 @@ public class Client {
     public static void main(String[] args) throws ClassNotFoundException {
         boolean exit = false;
         Menu.inicial();
+        System.out.println(System.getProperty("os.name"));
         while (!exit) {
 
             try {
