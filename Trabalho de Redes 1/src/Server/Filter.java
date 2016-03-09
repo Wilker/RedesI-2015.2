@@ -14,8 +14,11 @@ import java.nio.file.attribute.DosFileAttributes;
  *
  * @author wilkerrj
  */
-public class Filter implements FileFilter {
-
+public class Filter implements FileFilter { 
+    
+    /*
+     * OBS: Aqui no lab o JDK é 1.6, a classe java.nio só foi introduzina no JAVA 7(1.7)
+     */
     @Override
     public boolean accept(File dir) {
         Path path = Paths.get(dir.getAbsolutePath());

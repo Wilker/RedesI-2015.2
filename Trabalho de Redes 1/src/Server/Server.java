@@ -28,10 +28,10 @@ public class Server {
             System.out.println("Client connected " + connectionSocket.getInetAddress().getHostAddress());
             try {
                 Decoder decoder = new Decoder();//classe de decodificação do comando recebido
-                String[] command = decoder.decode(connectionSocket.getInputStream()); //string a ser enviada para o cliente;
+                String command = decoder.decode(connectionSocket.getInputStream()); //string a ser enviada para o cliente;
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
                 //ObjectOutputStream outToClient = new ObjectOutputStream(connectionSocket.getOutputStream());
-                outToClient.writeBytes(command[0]+"\n");
+                outToClient.writeBytes(command+"\n");
                 //outToClient.writeObject(command);
             } catch (IllegalArgumentException ex) {
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());

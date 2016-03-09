@@ -22,7 +22,6 @@ public class Client {
     public static void main(String[] args) throws ClassNotFoundException {
         boolean exit = false;
         Menu.inicial();
-        System.out.println(System.getProperty("os.name"));
         while (!exit) {
 
             try {
@@ -37,7 +36,11 @@ public class Client {
                     break;
                 }
                 outToServer.writeBytes(in + '\n');
-                System.out.println(inFromServer.readLine());
+                String resp = inFromServer.readLine();
+                String[] dir = resp.split(" ");
+                for (int i = 1; i < dir.length; i++) {
+                    System.out.println(dir[i]);
+                }
 //                String[] resp = (String[])inObjectFromServer.readObject();
 //                for (String string : resp) {
 //                    System.out.println(string);

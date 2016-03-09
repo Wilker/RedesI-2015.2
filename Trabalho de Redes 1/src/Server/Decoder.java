@@ -26,7 +26,7 @@ public class Decoder {
      * @throws IOException
      * @throws Exception
      */
-    String[] decode(InputStream in) throws IOException, IllegalArgumentException {
+    String decode(InputStream in) throws IOException, IllegalArgumentException {
         BufferedReader inFromClient = new BufferedReader(new InputStreamReader(in)); //recebe o InputStream do cliente
         defaultDirectory = setDefaultDirectory();
         currentDirectory = defaultDirectory;
@@ -49,15 +49,15 @@ public class Decoder {
         return null;//TODO
     }
 
-    private String[] listDirectory(String currentDirectory) {
+    private String listDirectory(String currentDirectory) {
         return Operator.listDir(currentDirectory);
     }
 
-    private String[] enterDirectory(String string, String currentDirectory) {
+    private String enterDirectory(String string, String currentDirectory) {
         return Operator.enter(string, currentDirectory);
     }
 
-    private static String[] backDirectory(String currentDirectory) {
+    private static String backDirectory(String currentDirectory) {
         return Operator.back(currentDirectory);
     }
 

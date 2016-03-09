@@ -14,36 +14,37 @@ import java.io.File;
  */
 public class Operator {
 
-    protected static String[] listDir(String dir) {
+    protected static String listDir(String dir) {
         File file = new File(dir);
-        File[] files = file.listFiles(new Filter());
-        String[] r = new String[files.length];
+        File[] files = file.listFiles();
+        String r = "";
         int i = 0;
         for (File f : files) {
-            r[i] = f.getPath();
+            r += " ";
+            r += f.getPath();
             i++;
         }
         return r;
     }
 
-    protected static String[] enter(String dir, String current) {
-        File file = new File(current);
-        File[] files = file.listFiles(new Filter());
-        String[] r = new String[1];
-        for (File f : files) {
-            if (f.isDirectory() && f.getParent().contains(dir)) {
-                r[1] = dir;
-                return r;
-            }
-        }
-        r[1] = current;
-        return r;
+    protected static String enter(String dir, String current) {
+        return null;
+//        File file = new File(current);
+//        File[] files = file.listFiles(new Filter());
+//        String[] r = new String[1];
+//        for (File f : files) {
+//            if (f.isDirectory() && f.getParent().contains(dir)) {
+//                r[1] = dir;
+//                return r;
+//            }
+//        }
+//        r[1] = current;
+//        return r;
     }
 
-    protected static String[] back(String current) {
+    protected static String back(String current) {
         File file = new File(current);
-        String[] r = new String[1];
-        r[1] = file.getParent();
+        String r = file.getParent();
         return r;
     }
 }
