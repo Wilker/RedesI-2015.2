@@ -28,18 +28,14 @@ public class Operator {
     }
 
     protected static String enter(String dir, String current) {
-        return null;
-//        File file = new File(current);
-//        File[] files = file.listFiles(new Filter());
-//        String[] r = new String[1];
-//        for (File f : files) {
-//            if (f.isDirectory() && f.getParent().contains(dir)) {
-//                r[1] = dir;
-//                return r;
-//            }
-//        }
-//        r[1] = current;
-//        return r;
+        File file = new File(current);
+        File[] files = file.listFiles(new Filter());
+        for (File f : files) {
+            if (f.isDirectory() && f.getParent().contains(dir)) {
+                return dir;
+            }
+        }
+        return current;
     }
 
     protected static String back(String current) {

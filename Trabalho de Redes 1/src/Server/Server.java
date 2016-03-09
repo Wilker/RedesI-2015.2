@@ -23,19 +23,19 @@ public class Server {
 
         ServerSocket server = new ServerSocket(9999); //cria um Socket para escutar na porta 9999
         System.out.println("Listening on port 9999");
+        Socket connectionSocket = server.accept(); // inicia a escuta do servidor
+        System.out.println("Client connected " + connectionSocket.getInetAddress().getHostAddress());
         while (true) {//loop eterno
-            Socket connectionSocket = server.accept(); // inicia a escuta do servidor
-            System.out.println("Client connected " + connectionSocket.getInetAddress().getHostAddress());
             try {
                 Decoder decoder = new Decoder();//classe de decodificação do comando recebido
                 String command = decoder.decode(connectionSocket.getInputStream()); //string a ser enviada para o cliente;
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
                 //ObjectOutputStream outToClient = new ObjectOutputStream(connectionSocket.getOutputStream());
-                outToClient.writeBytes(command+"\n");
+                outToClient.writeBytes(command + "\n");
                 //outToClient.writeObject(command);
             } catch (IllegalArgumentException ex) {
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-                outToClient.writeBytes("Comando Inválido");
+                outToClient.writeBytes("Comando_Invalido\n");
             }
         }
 
