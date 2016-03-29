@@ -33,11 +33,26 @@ public class Decoder {
         dir = inFromClient.readLine().split(" ");
         if (validate(dir)) {
             if (dir[0].equals("ls")) {
+                if (!dir[1].equals("init")) {
+                    currentDirectory = dir[1];
+                }
                 return listDirectory(currentDirectory);
+
+
             } else if (dir[0].equals("cd")) {
+                if (!dir[2].equals("init")) {
+                    currentDirectory = dir[2];
+                }
                 return enterDirectory(dir[1], currentDirectory);
+
+
             } else if (dir[0].equals("..")) {
+                if (!dir[1].equals("init")) {
+                    currentDirectory = dir[1];
+                }
                 return backDirectory(currentDirectory);
+
+
             } else if (dir[0].equals("get")) {
                 //TODO
                 getFile(dir[1]);
@@ -79,7 +94,7 @@ public class Decoder {
     private String setDefaultDirectory() {
         String system = System.getProperty("os.name");
         if (system.toLowerCase().contains("windows")) {
-            return "c:\\";        
+            return "c:\\";
         }
         return "/home";
     }

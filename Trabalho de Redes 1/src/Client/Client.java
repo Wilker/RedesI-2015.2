@@ -28,6 +28,7 @@ public class Client {
             BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in)); //cria um leitor e associa ao teclado
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream()); // cria uma conexão de saída com o servidor
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            String currentDirectory = "init";
             while (!exit) {
                 try {
                     String in = inFromUser.readLine();
@@ -35,11 +36,36 @@ public class Client {
                         exit = true;
                         break;
                     }
-                    outToServer.writeBytes(in + '\n');
-                    String resp = inFromServer.readLine();
-                    String[] dir = resp.split(" ");
-                    for (int i = 1; i < dir.length; i++) {
-                        System.out.println(dir[i]);
+                    if (in.equals("..")) {
+                        outToServer.writeBytes(in + " " + currentDirectory + '\n');
+                        String resp = inFromServer.readLine();
+                        currentDirectory = resp;
+                        System.out.println(resp);
+                    }
+                    if (in.equals("ls")) {
+                        outToServer.writeBytes(in + " " + currentDirectory + '\n');
+                        String resp = inFromServer.readLine();
+                        if (resp.equals("null")) {
+                            System.out.println("permissão negada");
+                        } else {
+                            String[] dir = resp.split(" ");
+                            for (int i = 1; i < dir.length; i++) {
+                                System.out.println(dir[i]);
+                            }
+                        }
+                    } else {
+                        String[] s = in.split(" ");
+                        if (s[0].equals("cd")) {
+                            if (s.length == 2) {
+                                outToServer.writeBytes(in + " " + currentDirectory + "\n");
+                            } else {
+                                System.out.println("Comando inválido");
+                            }
+                            String resp = inFromServer.readLine();
+                            String[] r = resp.split(" ");
+                            System.out.println(r[0]);
+                            currentDirectory = r[1];
+                        }
                     }
                 } catch (IOException ex) {
                     System.out.println("Erro na comunicação com o servidor");
