@@ -26,9 +26,8 @@ public class Client {
 
     public static void main(String[] args) throws ClassNotFoundException {
         try {
-            
-//            System.out.println(File.separator);
-//            System.out.println(File.pathSeparator);
+            String fileSeparator = File.separator;
+            String pathSeparator = File.pathSeparator;
             boolean exit = false;
             Menu.inicial();
             Socket clientSocket = new Socket("localhost", 9999);
@@ -44,18 +43,18 @@ public class Client {
                         break;
                     }
                     if (in.equals("..")) {
-                        outToServer.writeBytes(in + " " + currentDirectory + '\n');
+                        outToServer.writeBytes(in + pathSeparator + currentDirectory + '\n');
                         String resp = inFromServer.readLine();
                         currentDirectory = resp;
                         System.out.println(resp);
                     }
                     if (in.equals("ls")) {
-                        outToServer.writeBytes(in + " " + currentDirectory + '\n');
+                        outToServer.writeBytes(in + pathSeparator + currentDirectory + '\n');
                         String resp = inFromServer.readLine();
                         if (resp.equals("null")) {
                             System.out.println("permissão negada");
                         } else {
-                            String[] dir = resp.split(" ");
+                            String[] dir = resp.split(pathSeparator);
                             for (int i = 1; i < dir.length; i++) {
                                 System.out.println(dir[i]);
                             }
@@ -64,25 +63,26 @@ public class Client {
                         String[] s = in.split(" ");
                         if (s[0].equals("cd")) {
                             if (s.length == 2) {
-                                outToServer.writeBytes(in + " " + currentDirectory + "\n");
+                                outToServer.writeBytes(s[0] + pathSeparator + s[1] + pathSeparator + currentDirectory + "\n");
                             } else {
                                 System.out.println("Comando inválido");
                             }
                             String resp = inFromServer.readLine();
-                            String[] r = resp.split(" ");
+                            String[] r = resp.split(pathSeparator);
                             System.out.println(r[0]);
                             currentDirectory = r[1];
                         } else if (s[0].equals("get")) {
+                            System.out.println(in.subSequence(4, in.length()));
                             String saveDirectory;
                             saveDirectory = System.getProperty("user.dir");
-                            outToServer.writeBytes(in + " " + currentDirectory + "\n");
-                            String[] resp = inFromServer.readLine().split(" ");
+                            outToServer.writeBytes(s[0] + pathSeparator + in.subSequence(4, in.length()) + pathSeparator + currentDirectory + "\n");
+                            String[] resp = inFromServer.readLine().split(pathSeparator);
                             if (resp[0].equals("")) {
                                 System.out.println("Arquivo inexistente");
                             } else {
                                 byte[] buffer = new byte[Integer.parseInt(resp[0])];
                                 int bytesRead;
-                                FileOutputStream file = new FileOutputStream(new File(saveDirectory + "\\" + resp[1]));
+                                FileOutputStream file = new FileOutputStream(new File(saveDirectory + fileSeparator + resp[1]));
                                 InputStream receive = clientSocket.getInputStream();
                                 while ((bytesRead = receive.read(buffer)) != -1) {
                                     file.write(buffer, 0, bytesRead);

@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * @author Wilker
  */
 public class Operator {
-
+ static String pathSeparator = File.pathSeparator;
     protected static String listDir(String dir) {
         File file = new File(dir);
         File[] files = file.listFiles();//removido filtro pois no lab usa o JAVA6
@@ -33,7 +33,7 @@ public class Operator {
         String r = "";
         int i = 0;
         for (File f : files) {
-            r += " ";
+            r += pathSeparator;
             r += f.getPath();
             i++;
         }
@@ -45,11 +45,10 @@ public class Operator {
         File[] files = file.listFiles();//removido filtro pois no lab usa o JAVA6
         for (File f : files) {
             if (f.isDirectory() && f.getName().equals(dir)) {
-                System.out.println("Entrou aaqui!");
-                return f.getPath() + " " + f.getPath();//posso mudar aqui e retornar só um, mas terei q ajustar no cliente para responder a mensagem de erro pré determinada
+                return f.getPath() + pathSeparator + f.getPath();//posso mudar aqui e retornar só um, mas terei q ajustar no cliente para responder a mensagem de erro pré determinada
             }
         }
-        return "Diretorio_nao_encontrado " + current;
+        return "Diretorio_nao_encontrado"+pathSeparator + current;
     }
 
     protected static String back(String current) {
@@ -62,13 +61,15 @@ public class Operator {
     }
 
     protected static String getFile(String current, String fileToReceive, Socket socket) {
-        String separador = File.separator;
+        String separator = File.separator;
         try {
-            File file = new File(current + separador + fileToReceive);
+            File file = new File(current + separator + fileToReceive);               
             InputStream fileIn = new FileInputStream(file);
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            out.writeBytes(file.length() + " " + file.getName() + "\n");
-
+            System.out.println(file.length());
+            System.out.println(file.getName()) ;
+            out.writeBytes(file.length() + pathSeparator + file.getName() + "\n");
+            
             int tam = (int) file.length();
             byte[] buffer = new byte[tam];
             OutputStream outToClient = socket.getOutputStream();

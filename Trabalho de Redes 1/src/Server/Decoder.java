@@ -5,6 +5,7 @@
 package Server;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,11 +29,12 @@ public class Decoder {
      * @throws Exception
      */
     String decode(Socket socket) throws IOException, IllegalArgumentException {
+        String pathSeparator = File.pathSeparator;
         InputStream in = socket.getInputStream();
         BufferedReader inFromClient = new BufferedReader(new InputStreamReader(in)); //recebe o InputStream do cliente
         defaultDirectory = setDefaultDirectory();
         currentDirectory = defaultDirectory;
-        dir = inFromClient.readLine().split(" ");
+        dir = inFromClient.readLine().split(pathSeparator);
         if (validate(dir)) {
             if (dir[0].equals("ls")) {
                 if (!dir[1].equals("init")) {
