@@ -6,10 +6,14 @@ package Client;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +32,7 @@ public class Client {
             BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in)); //cria um leitor e associa ao teclado
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream()); // cria uma conexão de saída com o servidor
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String currentDirectory = "init";
+            String currentDirectory = "c:\\Users\\Wilker\\Desktop";
             while (!exit) {
                 try {
                     String in = inFromUser.readLine();
@@ -65,17 +69,40 @@ public class Client {
                             String[] r = resp.split(" ");
                             System.out.println(r[0]);
                             currentDirectory = r[1];
+                        } else if (s[0].equals("get")) {
+                            String saveDirectory;
+                            saveDirectory = System.getProperty("user.dir");
+                            outToServer.writeBytes(in + " " + currentDirectory + "\n");
+                            String[] resp = inFromServer.readLine().split(" ");
+                            if (resp[0].equals("")) {
+                                System.out.println("Arquivo inexistente");
+                            } else {
+                                byte[] buffer = new byte[Integer.parseInt(resp[0])];
+                                int bytesRead;
+                                FileOutputStream file = new FileOutputStream(new File(saveDirectory + "\\" + resp[1]));
+                                InputStream receive = clientSocket.getInputStream();
+                                while ((bytesRead = receive.read(buffer)) != -1) {
+                                    file.write(buffer, 0, bytesRead);
+                                }
+                                file.close();
+                                System.out.println("Arquivo recebido, encerrando conexão...");
+                                receive.close();
+                                clientSocket.close();
+                                System.out.println(resp[0] + resp[1]);
+                                break;
+                            }
                         }
                     }
+                } catch (SocketException ex) {
+                    System.out.println("Conexao encerrada");
                 } catch (IOException ex) {
                     System.out.println("Erro na comunicação com o servidor");
 
                 }
+
             }
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro"); //vou colocar uma msg melhor aqui, prometo!
         }
     }
 }

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,16 +29,22 @@ public class Server {
         while (true) {//loop eterno
             try {
                 Decoder decoder = new Decoder();//classe de decodificação do comando recebido
-                String command = decoder.decode(connectionSocket.getInputStream()); //string a ser enviada para o cliente;
-                DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-                //ObjectOutputStream outToClient = new ObjectOutputStream(connectionSocket.getOutputStream());
-                outToClient.writeBytes(command + "\n");
-                //outToClient.writeObject(command);
+                String command = decoder.decode(connectionSocket); //string a ser enviada para o cliente;
+                if (command.equals("sent")) {
+//                    connectionSocket = server.accept();
+                } else {
+                    DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+                    //ObjectOutputStream outToClient = new ObjectOutputStream(connectionSocket.getOutputStream());
+                    outToClient.writeBytes(command + "\n");
+                    //outToClient.writeObject(command);
+                }
             } catch (IllegalArgumentException ex) {
                 DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
                 outToClient.writeBytes("Comando_Invalido\n");
+            } catch (SocketException ex) {
+                System.out.println("Conexão encerrada");
+                break;
             }
         }
-
     }
 }
