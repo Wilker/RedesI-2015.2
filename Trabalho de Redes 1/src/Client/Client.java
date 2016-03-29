@@ -26,13 +26,16 @@ public class Client {
 
     public static void main(String[] args) throws ClassNotFoundException {
         try {
+            
+//            System.out.println(File.separator);
+//            System.out.println(File.pathSeparator);
             boolean exit = false;
             Menu.inicial();
             Socket clientSocket = new Socket("localhost", 9999);
             BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in)); //cria um leitor e associa ao teclado
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream()); // cria uma conexão de saída com o servidor
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String currentDirectory = "c:\\Users\\Wilker\\Desktop";
+            String currentDirectory = "init";
             while (!exit) {
                 try {
                     String in = inFromUser.readLine();
@@ -88,7 +91,6 @@ public class Client {
                                 System.out.println("Arquivo recebido, encerrando conexão...");
                                 receive.close();
                                 clientSocket.close();
-                                System.out.println(resp[0] + resp[1]);
                                 break;
                             }
                         }

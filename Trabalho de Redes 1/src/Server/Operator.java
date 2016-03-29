@@ -62,8 +62,9 @@ public class Operator {
     }
 
     protected static String getFile(String current, String fileToReceive, Socket socket) {
+        String separador = File.separator;
         try {
-            File file = new File(current + "\\" + fileToReceive);
+            File file = new File(current + separador + fileToReceive);
             InputStream fileIn = new FileInputStream(file);
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeBytes(file.length() + " " + file.getName() + "\n");
