@@ -22,7 +22,9 @@ import java.util.logging.Logger;
  * @author Wilker
  */
 public class Operator {
- static String pathSeparator = File.pathSeparator;
+
+    static String pathSeparator = File.pathSeparator;
+
     protected static String listDir(String dir) {
         File file = new File(dir);
         File[] files = file.listFiles();//removido filtro pois no lab usa o JAVA6
@@ -48,7 +50,7 @@ public class Operator {
                 return f.getPath() + pathSeparator + f.getPath();//posso mudar aqui e retornar só um, mas terei q ajustar no cliente para responder a mensagem de erro pré determinada
             }
         }
-        return "Diretorio_nao_encontrado"+pathSeparator + current;
+        return "Diretorio_nao_encontrado" + pathSeparator + current;
     }
 
     protected static String back(String current) {
@@ -63,15 +65,13 @@ public class Operator {
     protected static String getFile(String current, String fileToReceive, Socket socket) {
         String separator = File.separator;
         try {
-            File file = new File(current + separator + fileToReceive);               
+            File file = new File(current + separator + fileToReceive);
             InputStream fileIn = new FileInputStream(file);
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             System.out.println(file.length());
-            System.out.println(file.getName()) ;
+            System.out.println(file.getName());
             out.writeBytes(file.length() + pathSeparator + file.getName() + "\n");
-            
-            int tam = (int) file.length();
-            byte[] buffer = new byte[tam];
+            byte[] buffer = new byte[socket.getSendBufferSize()];
             OutputStream outToClient = socket.getOutputStream();
             int bytesRead;
             while ((bytesRead = fileIn.read(buffer)) > 0) {

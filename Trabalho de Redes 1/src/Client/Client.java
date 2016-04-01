@@ -80,7 +80,7 @@ public class Client {
                             if (resp[0].equals("")) {
                                 System.out.println("Arquivo inexistente");
                             } else {
-                                byte[] buffer = new byte[Integer.parseInt(resp[0])];
+                                byte[] buffer = new byte[clientSocket.getReceiveBufferSize()];
                                 int bytesRead;
                                 FileOutputStream file = new FileOutputStream(new File(saveDirectory + fileSeparator + resp[1]));
                                 InputStream receive = clientSocket.getInputStream();
