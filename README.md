@@ -1,1 +1,2 @@
-# A simple FTP Client and Server Implementation
+# A simple FTP Implementation
+A multiplataform simple FTP Client and Server Implementation
